@@ -44,3 +44,24 @@ print("\nEx. 1.2")
 tossing(20)
 tossing(1000)
 tossing(100000)
+
+##########################################
+#
+# Example 1.3 (Dice Rolling)
+#
+##########################################
+
+def rolls(n: int) -> List[int]:
+    die = range(1, 7)
+    return [random.choice(die) for _ in range(4)]
+    
+def de_mere_1(n: int) -> int:
+    return sum([6 in rolls(4) for _ in range(n)])
+
+def play_single_dice(n: int) -> None:
+    six = de_mere_1(n)
+    print(f'for {n} rolls six turns up {six} times or {100*six/n}%')
+
+print("\nEx. 1.3")
+print(play_single_dice(1000))
+print(play_single_dice(10000))
