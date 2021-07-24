@@ -67,18 +67,22 @@ print("\n1 dice:")
 play_single_dice(1000)
 play_single_dice(10000)
 
-def de_mere_2(n: int) -> int:
+def rolls_2(n: int) -> bool:
     win = (6, 6)
-    double_six = 0
     for _ in range(n):
         roll = (random.choice(range(1, 7)), random.choice(range(1, 7)))
-        double_six += (win == roll)
-    return double_six
+        if (roll == win):
+            return True
+    return False
 
-def play_double_dice(n: int) -> None:
-    six = de_mere_2(n)
-    print(f'for {n} rolls six turns up {six} times or {100*six/n}%')
+def de_mere_2(m: int, n: int) -> int:    
+    return sum([rolls_2(m) for _ in range(n)])
+
+def play_double_dice(m: int, n: int) -> None:
+    six = de_mere_2(m, n)
+    print(f'The probabilty a pair of sixes will occur in {m} rolls is {100*six/n}% for {n} tries')
 
 print("\n2 dices:")
-play_double_dice(24)
-play_double_dice(27000)
+
+play_double_dice(24, 1125) # 27000
+play_double_dice(25, 1080) # 27000
