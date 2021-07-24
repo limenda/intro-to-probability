@@ -63,6 +63,7 @@ def play_single_dice(n: int) -> None:
     print(f'for {n} rolls six turns up {six} times or {100*six/n}%')
 
 print("\nEx. 1.3")
+print("\n1 dice:")
 play_single_dice(1000)
 play_single_dice(10000)
 
@@ -77,5 +78,7 @@ def de_mere_2(n: int) -> int:
 def play_double_dice(n: int) -> None:
     six = de_mere_2(n)
     print(f'for {n} rolls six turns up {six} times or {100*six/n}%')
-    
+
+print("\n2 dices:")
 play_double_dice(24)
+play_double_dice(27000)
