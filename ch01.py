@@ -52,13 +52,17 @@ tossing(100000)
 ##########################################
 
 def rolls(n: int) -> List[int]:
+    ''' The function rolls a die n times and returns the list of results.'''
     die = range(1, 7)
     return [random.choice(die) for _ in range(n)]
     
 def de_mere_1(n: int) -> int:
+    ''' The function returns the number of times a six turns up in four rolls of a die
+    for n experiments.'''
     return sum([6 in rolls(4) for _ in range(n)])
 
 def play_single_dice(n: int) -> None:
+    ''' just a helper function to print out the results of several experiments'''
     six = de_mere_1(n)
     print(f'for {n} rolls six turns up {six} times or {100*six/n}%')
 
@@ -68,6 +72,8 @@ play_single_dice(1000)
 play_single_dice(10000)
 
 def rolls_2(n: int) -> bool:
+    ''' The function rolls two dices and responds back if there was a pair of sixes
+    at least once.'''
     win = (6, 6)
     for _ in range(n):
         roll = (random.choice(range(1, 7)), random.choice(range(1, 7)))
@@ -75,10 +81,13 @@ def rolls_2(n: int) -> bool:
             return True
     return False
 
-def de_mere_2(m: int, n: int) -> int:    
+def de_mere_2(m: int, n: int) -> int:
+    ''' The function returns the number of times a pair of sixes turns up
+    in m rolls of two dices for n experiments.'''
     return sum([rolls_2(m) for _ in range(n)])
 
 def play_double_dice(m: int, n: int) -> None:
+    ''' just a helper function to print out the results of several experiments'''
     six = de_mere_2(m, n)
     print(f'The probabilty a pair of sixes will occur in {m} rolls is {100*six/n}% for {n} tries')
 
