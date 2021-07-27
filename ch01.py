@@ -8,6 +8,9 @@ Created on Wed Jul 21 21:50:03 2021
 import random
 from collections import Counter
 from typing import List
+from typing import Tuple
+
+from matplotlib import pyplot as plt
 
 ##########################################
 #
@@ -29,15 +32,19 @@ print(random_numbers(20))
 ##########################################
 
 def coin_tosses(n: int) -> List[str]:
-    ''' The function returs number of heads for tossing a coin n times'''
+    ''' The function returs the results of tossing a coin n times'''
     coin = ['H', 'T']
-    tosses = [random.choice(coin) for _ in range(n)]
-    result = Counter(tosses)
-    return result['H']
+    tosses = [random.choice(coin) for _ in range(n)]    
+    return tosses
+
+def get_results(tosses: List[str]) -> Tuple[int, int]:
+    ''' The function says how many heads and tails were in the game'''
+    results = Counter(tosses)
+    return results['H'], results['T']
 
 def tossing(n: int) -> None:
     ''' just a helper function to print out the results of several experiments'''
-    heads = coin_tosses(n)
+    heads = get_results(coin_tosses(n))[0]
     print(f'tossing {n} times. Heads: {heads}/{n} = {heads/n}')
     
 print("\nEx. 1.2")
@@ -95,3 +102,76 @@ print("\n2 dices:")
 
 play_double_dice(24, 1125) # 27000
 play_double_dice(25, 1080) # 27000
+
+##########################################
+#
+# Example 1.3 (Heads or Tails)
+#
+##########################################
+
+def get_history(results: List[str]) -> List[int]:
+    ''' The function turns the plain results into the list of scores Peter got over the game at each toss.
+        0 counts in favour to previous toss as per convention.'''
+        
+    # turns ['H', 'H', 'T' ... ] into [1, 1, -1, ...]
+    results = [1 if result == 'H' else -1 for _, result in enumerate(results)]
+    
+    # figuring out when Peter was above 0:
+    # turn ['1', '1', '-1' ... ] into [1, 2, 1, ...]
+    for i in range(1, len(results)):
+        results[i] += results[i-1]
+
+    # setting zeroes as per convention:
+    # turn [..., 1, 0, -1, ...] to [..., 1, 1, -1, ...]
+    for i in range(1, len(results)):
+        if results[i] == 0:
+            results[i] = results[i-1] 
+
+    return results
+
+def plot_game(history: List[int]) -> None:
+    ''' The function plots a game as per the score history.'''
+    plt.title(f"Peter’s winnings in {len(history)} plays of heads or tails.")
+    plt.plot(range(len(history)), history)    
+    plt.show()
+
+def HTSimulation(game: int, experiments: int):
+    ''' The function runs the game (number of tosses in a single run)
+    {experiments} number of times and returns the list of scores and
+    the list of number of times being in the leads.'''
+    
+    wins = []
+    leads = []
+    for _ in range(experiments):
+        tosses = coin_tosses(game)
+        heads, tails = get_results(tosses)        
+        wins.append(heads - tails)
+        history = get_history(tosses)
+        leads.append(sum(result > 0 for result in history))
+
+    return Counter(wins), Counter(leads)
+
+def Spikegraph(wins, leads):
+    ''' the function draws the distributions of results'''
+    plt.figure(1)
+    plt.title("Distribution of winnings")
+    plt.bar(wins.keys(), wins.values())
+
+    plt.figure(2)
+    plt.title("Distribution of number of times in the lead")
+    plt.bar(leads.keys(), leads.values())
+
+    plt.show()
+
+game = 40
+# Plot one game
+history = get_history(coin_tosses(game))
+plot_game(history)
+
+# run the game multiple times
+experiments = 10000
+wins, leads = HTSimulation(game, experiments)
+# Normalize results
+wins = {k: v/experiments for k, v in wins.items()}
+leads = {k: v/experiments for k, v in leads.items()}
+Spikegraph(wins, leads)
