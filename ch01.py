@@ -7,6 +7,8 @@ Created on Wed Jul 21 21:50:03 2021
 
 import random
 from collections import Counter
+from collections import OrderedDict
+from typing import Dict
 from typing import List
 from typing import Tuple
 
@@ -135,7 +137,7 @@ def plot_game(history: List[int]) -> None:
     plt.plot(range(len(history)), history)    
     plt.show()
 
-def HTSimulation(game: int, experiments: int):
+def HTSimulation(game: int, experiments: int) -> Tuple[Dict[int, int], Dict[int, int]]:
     ''' The function runs the game (number of tosses in a single run)
     {experiments} number of times and returns the list of scores and
     the list of number of times being in the leads.'''
@@ -151,7 +153,7 @@ def HTSimulation(game: int, experiments: int):
 
     return Counter(wins), Counter(leads)
 
-def Spikegraph(wins, leads):
+def Spikegraph(wins, leads) -> None:
     ''' the function draws the distributions of results'''
     plt.figure(1)
     plt.title("Distribution of winnings")
@@ -163,6 +165,7 @@ def Spikegraph(wins, leads):
 
     plt.show()
 
+print("\nEx. 1.4")
 game = 40
 # Plot one game
 history = get_history(coin_tosses(game))
@@ -175,3 +178,61 @@ wins, leads = HTSimulation(game, experiments)
 wins = {k: v/experiments for k, v in wins.items()}
 leads = {k: v/experiments for k, v in leads.items()}
 Spikegraph(wins, leads)
+
+game = 1000
+history = get_history(coin_tosses(game))
+plot_game(history)
+
+game = 10000
+history = get_history(coin_tosses(game))
+plot_game(history)
+
+##########################################
+#
+# Example 1.5 (Horse Races)
+#
+##########################################
+
+def winner_horse(n: float) -> str:
+    ''' The function takes the probablity {n} and returns the horse expected to win.'''
+    horse = 'Dolby'
+    
+    if n < 0.3:
+        horse = 'Acorn'
+    elif 0.3 <= n < 0.7:
+        horse = 'Balky'
+    elif 0.7 <= n < 0.9:
+        horse = 'Chestnut'
+    
+    return horse
+
+def HorseRace(races: int) -> Dict[str, int]:
+    ''' The function returns the race statistics of {races} in the form
+    horse: win counts'''
+    wins = [winner_horse(random.random()) for _ in range(races)]
+    return Counter(wins)
+
+def racing(n: int) -> None:
+    ''' just a helper function to print out the racing statistics.'''
+    wins = HorseRace(n)
+    # normalize, sort and print out the results
+    wins = {k: v/n for k, v in wins.items()}
+    wins = OrderedDict(sorted(wins.items()))
+    for key, value in wins.items():
+        print(f'        {key}:{value*100}%')
+
+races = 10
+print("\nEx. 1.5")
+print(""" Expected results
+        Acorn: 30%
+        Balky: 40%
+        Chestnut: 20%
+        Dolby: 10%""")
+
+races = 10
+print(f' after {races} races:')
+racing(races)
+
+races = 1000
+print(f' after {races} races:')
+racing(races)
