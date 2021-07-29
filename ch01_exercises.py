@@ -139,22 +139,23 @@ print(f"with {rolls} rolls the probability of having three sixes is {100*sixth}%
 ###    Exercise 6    ###
 
 def is_red() -> bool:
+    ''' The function simulates spin the wheel, returns True if red slot, False otherwise. '''
     return random.random() <= 9/19 # reds are 18/38 slots. The probablity for single spin is actually the same
-
-def spin_the_wheel(spins: int, bet: Callable[[], bool]) -> List[int]:
-    return [1 if bet() else -1 for _ in range(spins)]
 
 print("\nExercise 6")
 spins = 1000
-result = sum(spin_the_wheel(spins, is_red))
+result = sum([1 if is_red() else -1 for _ in range(spins)])
 print(f'{result}$ in {spins} spins.')
 
 ###    Exercise 7    ###
 
 def is_17() -> bool:
+    ''' The function simulates spin the wheel, returns True if 17, False otherwise. '''
     return random.random() <= 1/38
 
-def history(results: List[int]) -> List[int]:
+def turn_into_history(results: List[int]) -> List[int]:
+    ''' This is a helper function. Transforms the list of win/loss on each step into the total sum of money.
+    Needed to plot the history of spins properly. '''
     for i in range(1, len(results)):
         results[i] = results[i-1] + results[i]
     return results
@@ -162,9 +163,11 @@ def history(results: List[int]) -> List[int]:
 print("\nExercise 7")
 
 spins = 500
-reds = spin_the_wheel(spins, is_red)
-seventeens = spin_the_wheel(spins, is_17)
+reds = [1 if is_red() else -1 for _ in range(spins)]
+reds = turn_into_history(reds)
+seventeens = [35 if is_17() else -1 for _ in range(spins)]
+seventeens = turn_into_history(seventeens)
 x = range(spins)
 plt.plot(x, reds, 'r')
-#plt.plot(x, seventeens, 'b')
+plt.plot(x, seventeens, 'b')
 plt.show()
