@@ -7,6 +7,10 @@ Created on Wed Jul 28 19:32:16 2021
 
 import random
 
+from typing import Callable
+from typing import List
+import matplotlib.pyplot as plt
+
 ###    Exercise 1    ###
 
 def CoinTosses_v1(n: int) -> None:
@@ -131,3 +135,36 @@ while sixth < 0.5:
     sixth = rolling(rolls, experiments)
     
 print(f"with {rolls} rolls the probability of having three sixes is {100*sixth}%")
+
+###    Exercise 6    ###
+
+def is_red() -> bool:
+    return random.random() <= 9/19 # reds are 18/38 slots. The probablity for single spin is actually the same
+
+def spin_the_wheel(spins: int, bet: Callable[[], bool]) -> List[int]:
+    return [1 if bet() else -1 for _ in range(spins)]
+
+print("\nExercise 6")
+spins = 1000
+result = sum(spin_the_wheel(spins, is_red))
+print(f'{result}$ in {spins} spins.')
+
+###    Exercise 7    ###
+
+def is_17() -> bool:
+    return random.random() <= 1/38
+
+def history(results: List[int]) -> List[int]:
+    for i in range(1, len(results)):
+        results[i] = results[i-1] + results[i]
+    return results
+
+print("\nExercise 7")
+
+spins = 500
+reds = spin_the_wheel(spins, is_red)
+seventeens = spin_the_wheel(spins, is_17)
+x = range(spins)
+plt.plot(x, reds, 'r')
+#plt.plot(x, seventeens, 'b')
+plt.show()
