@@ -102,3 +102,32 @@ n = 1000
 print("\nExercise 4")
 wins = sum([game() for _  in range(n)])
 print(f'The probability to win is {100*wins/n}%')
+
+###    Exercise 5    ###
+
+def triple_six(n: int) -> int:
+    ''' The function simulates three dices rolling {n} times.
+    Returns the 'happy' step, 0 otherwise.'''
+    for m in range(1, n+1):
+        if three_dice_roll() == 18: # 6 + 6 + 6
+            return m
+        
+    return 0
+
+def rolling(rolls: int, experiments: int) -> float:
+    ''' The function runs rolling with {n} rolls {experiments} number of times.
+    Returns the proportion of tries where triple six was found at least once.'''
+    return sum([triple_six(rolls) != 0 for _ in range(experiments)])/experiments
+
+print("\nExercise 5")
+rolls = 100
+experiments = 1000
+sixth = rolling(rolls, experiments)
+print(f"for {experiments} experiments per {rolls} rolls the probability of having three sixes is {100*sixth}%")
+print("Let's try to figure out roughly the minimal number of rolls to have the probability at least 50%.")
+
+while sixth < 0.5:
+    rolls += 10 # some reasonable step for not making it run long
+    sixth = rolling(rolls, experiments)
+    
+print(f"with {rolls} rolls the probability of having three sixes is {100*sixth}%")
