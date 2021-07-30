@@ -9,7 +9,9 @@ import random
 
 from typing import Callable
 from typing import List
+from typing import Tuple
 import matplotlib.pyplot as plt
+
 
 ###    Exercise 1    ###
 
@@ -171,3 +173,46 @@ x = range(spins)
 plt.plot(x, reds, 'r')
 plt.plot(x, seventeens, 'b')
 plt.show()
+
+###    Exercise 8    ###
+def coin_tosses(n: int) -> List[int]:
+    ''' The function returs the results of tossing a coin n times.
+    Head: 1, Tail: -1''' 
+    return [random.choice([-1, 1]) for _ in range(n)]    
+
+def check_intuition(game: int, experiments: int) -> Tuple[float, float]:
+    ''' The function simulates coins tosses: {experiments} sets per {game} tosses in set.
+    Returns the proportion of player ends up 0 and proportion of being player in lead'''
+    always_lead = 0
+    endup_zero = 0
+    
+    for _ in range(experiments):
+        results = coin_tosses(game)
+        
+        # turn the results of single  tosses into list of total amount at each step
+        for i in range(1, len(results)):
+            results[i] += results[i-1]
+        endup_zero += (results[-1] == 0) # if round ends up with 0
+        
+        # count 0 results in favour of previous step for better definition of lead
+        for i in range(1, len(results)):
+            if results[i] == 0:
+                results[i] = results[i-1]
+        always_lead += all(i >= 0 for i in results) # check if player was always in leads during the round
+        
+    return endup_zero/experiments, always_lead/experiments
+
+experiments = 1000
+n = 2
+
+print("\nExercise 8")
+zeroes, leads = check_intuition(n, experiments)
+print(f'\nfor {n} tosses:')
+print(f'Player ended up 0: {100*zeroes}% of time,\nwas always in leads: {100* leads}% of time.')
+
+experiments = 1000
+n = 4
+
+zeroes, leads = check_intuition(n, experiments)
+print(f'\nfor {n} tosses:')
+print(f'Player ended up 0: {100*zeroes}% of time,\nwas always in leads: {100* leads}% of time.')
