@@ -249,3 +249,35 @@ def labouchere(digits: List[int]) -> None:
 print("\nExercise 9")
 digits = [1, 2, 3, 4]
 labouchere(digits)
+
+###    Exercise 10   ###
+
+def martingale():
+    ''' Implements the martingale doubling system as described in the book'''
+    scores = 0
+    bet = 1
+    iterations = 0
+    
+    while -100 <= scores <= 5:
+        if is_red():
+            scores += bet
+            bet = 1
+        else:
+            scores -= bet
+            bet *= 2
+        
+        iterations += 1
+        # print(f'Iteration: {iterations}: bet {bet} next time') comment out to get the history
+        
+        if iterations >= 5000: # to prevent the infinite loop
+            break
+    
+    print(f'Scored {scores} in {iterations} iterations')
+    
+print("\nExercise 10")
+martingale()
+
+n = 10
+print("just out of curiosity - let's try to repeat the method {n} times")
+for _ in range(n):
+    martingale()
