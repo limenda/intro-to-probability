@@ -216,3 +216,36 @@ n = 4
 zeroes, leads = check_intuition(n, experiments)
 print(f'\nfor {n} tosses:')
 print(f'Player ended up 0: {100*zeroes}% of time,\nwas always in leads: {100* leads}% of time.')
+
+###    Exercise 9    ###
+
+def labouchere(digits: List[int]) -> None:
+    ''' Implements the Labouchere system as described in the book. 
+    Takes the list of numbers. '''
+    win = 0
+    iterations = 0
+    
+    while len(digits):
+        if len(digits) > 1:
+            beat = digits[0] + digits[-1]
+        else:
+            beat = digits[0]
+            
+        if is_red():
+            win += beat
+            digits.pop(0)
+            if len(digits):
+                digits.pop(-1)
+        else:
+            win -= beat
+            digits.append(beat)
+        
+        iterations += 1
+        print(f'Iteration {iterations}: List: {digits}, score: {win}.')
+        
+        if iterations >= 5000: # to prevent the infinite loop
+            break
+
+print("\nExercise 9")
+digits = [1, 2, 3, 4]
+labouchere(digits)
