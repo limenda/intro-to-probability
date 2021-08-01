@@ -440,6 +440,7 @@ for _ in range(plays):
 steps = Counter(steps)
 
 plt.bar(steps.keys(), steps.values())
+plt.show()
 
 print(f'in {plays} games you would win:')
 for key, value in steps.items():
@@ -509,3 +510,79 @@ babies = sum([born_till_boy() for _ in range(families)])
 print(f'{babies} babies in {families} families expected to born while waiting for first boy.')
 babies = sum([born_till() for _ in range(families)])
 print(f'{babies} babies in {families} families expected to born while waiting for boy&girl.')
+
+###    Exercise 16   ###
+
+def next_1D_step() -> int:
+    ''' The function decides next step from two possible directions.'''
+    return random.choice([-1, 1])
+
+def line_walk():
+    ''' The function simulates the walk in two directions.
+    Returns the number of steps need to return to the start point.'''
+    walk = 1
+    step = next_1D_step()
+    while step:
+        walk += 1
+        step += next_1D_step()
+        
+        if step >= 10000: # to avoid infinite loop
+            break;
+            
+    return walk
+
+print("\nExercise 17")
+walks = 100
+steps = [line_walk() for _ in range(walks)]
+plt.title('Case A: Line walk.')
+plt.plot(range(walks), steps)
+plt.show()
+
+def next_2D_step() -> Tuple[int, int]:
+    ''' The function decides next step from four possible directions.'''
+    return random.choice([(0, 1), (1, 0), (0, -1), (-1, 0)])
+
+def walk_2D() -> int:
+    ''' The function simulates the walk in four directions.
+    Returns the number of steps need to return to the start point.'''
+    walk = 1
+    position = next_2D_step()
+    while position != (0, 0):
+        walk += 1
+        next_pos = next_2D_step()
+        position = tuple(sum(x) for x in zip(position, next_pos)) # element-wise addition
+        
+        if walk >= 10000: # to avoid infinite loop
+            break;
+            
+    return walk
+
+steps = [walk_2D() for _ in range(walks)]
+plt.title('Case B: 2D walk.')
+plt.plot(range(walks), steps)
+plt.show()
+
+def next_3D_step() -> Tuple[int, int, int]:
+    ''' The function decides next step from eight possible directions.'''
+    return random.choice([(0, 0, 1), (0, 1, 0), (1, 0, 0),
+                          (0, 0, -1), (0, -1, 0), (-1, 0, 0)])
+
+def walk_3D(limit: int) -> int:
+    ''' The function simulates the walk in eight directions.
+    Takes the limit of steps possible - to avoid infinite walk.
+    Returns the number of steps need to return to the start point.'''
+    walk = 1
+    position = next_3D_step()
+    while position != (0, 0, 0):
+        walk += 1
+        next_pos = next_3D_step()
+        position = tuple(sum(x) for x in zip(position, next_pos)) # element-wise addition
+        
+        if walk >= limit: # to avoid infinite loop
+            break;
+            
+    return walk
+
+limit = 1000000
+steps = walk_3D(limit)
+print(f"Case C: trying to complete the walk in {limit} steps. Actually taken: {steps}.")
