@@ -444,3 +444,38 @@ plt.bar(steps.keys(), steps.values())
 print(f'in {plays} games you would win:')
 for key, value in steps.items():
     print(f'\t{2**key}$: in {100*value/plays}% of cases.')
+    
+###    Exercise 15   ###
+
+def is_hit():
+    ''' The function randomly reports is there was a hit with the fifty-fifty chance'''
+    return random.random() <= 0.5
+
+def basketball_player(n: int) -> List[bool]:
+    ''' The function returns the shots history for single player. 
+    n: is the number of shots in the game.'''
+    return [is_hit() for _ in range(n)]
+
+def five_in_a_row(shots: List[bool]) -> bool:
+    ''' The function takes the shots history and reports back if there was a streak of five.'''
+    five_hits = 0
+    for shot in shots:
+        if shot:
+            five_hits += 1
+            if five_hits >= 5:
+                return True
+        else:
+            five_hits = 0
+            
+    return False
+
+games = 1000
+hits = 20
+five = 0
+
+for _ in range(games):
+    shots = basketball_player(hits)
+    five += five_in_a_row(shots)
+    
+print("\nExercise 15")
+print(f'The probability to have a streak of five is {100*five/games}%.')
