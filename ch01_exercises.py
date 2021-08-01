@@ -511,7 +511,7 @@ print(f'{babies} babies in {families} families expected to born while waiting fo
 babies = sum([born_till() for _ in range(families)])
 print(f'{babies} babies in {families} families expected to born while waiting for boy&girl.')
 
-###    Exercise 16   ###
+###    Exercise 17   ###
 
 def next_1D_step() -> int:
     ''' The function decides next step from two possible directions.'''
