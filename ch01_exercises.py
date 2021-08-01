@@ -479,3 +479,33 @@ for _ in range(games):
     
 print("\nExercise 15")
 print(f'The probability to have a streak of five is {100*five/games}%.')
+
+###    Exercise 16   ###
+
+def born_till_boy() -> int:
+    ''' The function reports how many children might be born unless first boy comes.'''
+    babies = 1
+    while not is_boy():
+        babies += 1
+    return babies
+
+def born_till() -> int:
+    ''' The function reports how many children might be born unless boy and girl come.'''
+    boy = 0
+    girl = 0
+    
+    while not (boy & girl):
+        if is_boy():
+            boy +=1
+        else:
+            girl += 1
+    
+    return boy + girl
+
+families = 100000
+
+print("\nExercise 16")
+babies = sum([born_till_boy() for _ in range(families)])
+print(f'{babies} babies in {families} families expected to born while waiting for first boy.')
+babies = sum([born_till() for _ in range(families)])
+print(f'{babies} babies in {families} families expected to born while waiting for boy&girl.')
