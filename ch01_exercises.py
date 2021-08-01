@@ -323,3 +323,65 @@ even_wins = HTSimulation(tosses, experiments)
 tosses = 4
 experiments = 1000
 even_wins = HTSimulation(tosses, experiments)
+    
+###    Exercise 12   ###
+
+def vote_for_rep(chance: float) -> bool:
+    ''' The function simulates a single vote. Takes a chance to vote for Republicans.
+    Returns True if voted for Republicans, otherwise False.'''
+    return random.random() <= chance
+
+def sample(n: int, chance: float) -> Tuple[int, int]:
+    ''' The function simulates sample of {n} votes with {chance} probability voting for Republicans.'''
+    republicans = 0
+    democrates = 0
+    for _ in range(n):
+        if vote_for_rep(chance):
+            republicans += 1
+        else:
+            democrates += 1
+            
+    return republicans, democrates
+
+def check_plan(n: int, experiments: int, chance: float) -> None:
+    ''' The function validates a poster plan.
+    It helps us to understand if the result we got from the first sample in {n} votes with {chance} probability to win for Democracies is consistent.
+    Fot that we take {experiments} smaples, pre {n} votes each and check if the prediction stays the same.'''
+    
+    candidates = ("Republicans", "Democrates")
+    republicans, democrates = sample(n, chance)
+    winner = candidates[democrates > republicans] # trick to print the winner name correctly
+    republicans_votes = 0
+    democrates_votes = 0
+    
+    print(f'The sample is {n}, Republicans chance to win is {chance}:')
+    print(f'\t{100*republicans/n}% voting for Republicans')
+    print(f'\t{100*democrates/n}% voting for Democrates')
+    print(f'\t{winner} should win')
+    print(f'\nNow try to run same prediction {experiments} times:')
+        
+    for _ in range(experiments):
+        republicans, democrates = sample(n, chance)
+        if republicans > democrates:
+            republicans_votes += 1
+        else:
+            democrates_votes += 1
+            
+    print(f"\tin {100*republicans_votes/experiments}% cases should win Republicans")
+    print(f"\tin {100*democrates_votes/experiments}% cases should win Democrates\n")
+    
+n = 1000
+experiments = 100
+chance = 0.48
+print("\nExercise 12")
+check_plan(n, experiments, chance)
+
+n = 1000
+experiments = 100
+chance = 0.49
+check_plan(n, experiments, chance)
+
+n = 3000
+experiments = 100
+chance = 0.49
+check_plan(n, experiments, chance)
