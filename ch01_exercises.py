@@ -176,10 +176,13 @@ plt.show()
 
 ###    Exercise 8    ###
 
+def toss() -> int:
+    return random.choice([-1, 1])
+
 def coin_tosses(n: int) -> List[int]:
     ''' The function returs the results of tossing a coin n times.
     Head: 1, Tail: -1''' 
-    return [random.choice([-1, 1]) for _ in range(n)]    
+    return [toss() for _ in range(n)]    
 
 def check_intuition(game: int, experiments: int) -> Tuple[float, float]:
     ''' The function simulates coins tosses: {experiments} sets per {game} tosses in set.
@@ -414,3 +417,30 @@ days = 365
 boy_days = born_per_year(days, babies)
 print(f"Small hospital: ({babies} babies in a day).\n\t{boy_days} days, where over 60% of boys were born")
 
+###    Exercise 14   ###
+
+def j_wins():
+    ''' The function simulates the coin tossing until heads come up.
+    Returns the step when that occurs.'''
+    side = -1 # tail
+    step = 0
+    
+    while side != 1:
+        step += 1
+        side = toss()
+        
+    return step
+    
+print("\nExercise 14")
+plays = 1000
+steps = []
+for _ in range(plays):
+    steps.append(j_wins())
+    
+steps = Counter(steps)
+
+plt.bar(steps.keys(), steps.values())
+
+print(f'in {plays} games you would win:')
+for key, value in steps.items():
+    print(f'\t{2**key}$: in {100*value/plays}% of cases.')
