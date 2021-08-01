@@ -7,7 +7,7 @@ Created on Wed Jul 28 19:32:16 2021
 
 import random
 
-from typing import Callable
+from collections import Counter
 from typing import List
 from typing import Tuple
 import matplotlib.pyplot as plt
@@ -175,6 +175,7 @@ plt.plot(x, seventeens, 'b')
 plt.show()
 
 ###    Exercise 8    ###
+
 def coin_tosses(n: int) -> List[int]:
     ''' The function returs the results of tossing a coin n times.
     Head: 1, Tail: -1''' 
@@ -281,3 +282,44 @@ n = 10
 print("just out of curiosity - let's try to repeat the method {n} times")
 for _ in range(n):
     martingale()
+    
+###    Exercise 11   ###
+
+def HTSimulation(tosses: int, experiments: int) -> None:
+    ''' The function counts the probabilities of even max winning
+    running the given number of experimnets with the known number of tosses in one experiment.'''
+    even_wins = []
+    
+    for _ in range(experiments):
+        wins = [0] # for total loose, e.g. [-1, -1] the max number should be 0 - what player had _before_ the game
+        wins.extend(coin_tosses(tosses)) # collecting all the other results
+        # turn the results of single  tosses into list of total amount at each step
+        for i in range(1, len(wins)):
+            wins[i] += wins[i-1]   
+            
+        max_win = max(wins)        
+        if not max_win % 2: # we are intested only in even max achievments
+            even_wins.append(max_win)
+
+    even_wins = Counter(even_wins)
+    print("The proportions are:")
+    for k, v in even_wins.items():
+        print(f"{k}: {v/experiments}")
+        
+    # let's also plot the results for better trend visibility
+    even_wins = {k: v/experiments for k, v in even_wins.items()}
+    plt.bar(even_wins.keys(), even_wins.values())
+    plt.show()
+
+print("\nExercise 11")
+tosses = 40
+experiments = 10000
+HTSimulation(tosses, experiments)
+
+tosses = 2
+experiments = 1000
+even_wins = HTSimulation(tosses, experiments)
+
+tosses = 4
+experiments = 1000
+even_wins = HTSimulation(tosses, experiments)
