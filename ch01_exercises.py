@@ -385,3 +385,32 @@ n = 3000
 experiments = 100
 chance = 0.49
 check_plan(n, experiments, chance)
+
+###    Exercise 13   ###
+
+def is_boy() -> bool:
+    ''' The function randomly reports if newborn was a boy.'''
+    return random.random() <= 0.5
+
+def born_per_day(n: int) -> int:
+    ''' The function generates {n} babies.'''
+    return sum([is_boy() for _ in range(n)])
+
+def born_per_year(days: int, babies: int) -> int:
+    ''' The function returns how many days where over 60% of boys were born.
+    It takes number of days to consider. And number of babies expect to be born in a day.'''
+    boy_days = [born_per_day(babies) for _ in range(days)]            
+    return sum([boys/babies > 0.6 for boys in boy_days])
+    
+babies = 45
+days = 365
+print("\nExercise 13")
+boy_days = born_per_year(days, babies)
+print(f"Large hospital: ({babies} babies in a day).\n\t{boy_days} days, where over 60% of boys were born")
+
+
+babies = 15
+days = 365
+boy_days = born_per_year(days, babies)
+print(f"Small hospital: ({babies} babies in a day).\n\t{boy_days} days, where over 60% of boys were born")
+
